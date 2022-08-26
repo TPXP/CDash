@@ -15,7 +15,7 @@
 =========================================================================*/
 
 /** Remove builds by their group-specific auto-remove timeframe setting */
-function removeBuildsGroupwise($projectid, $maxbuilds, $force = false)
+function removeBuildsGroupwise($projectid, $maxbuilds, $force = false, $echo = true)
 {
     require_once 'include/pdo.php';
     require_once 'include/common.php';
@@ -54,9 +54,11 @@ function removeBuildsGroupwise($projectid, $maxbuilds, $force = false)
         }
     }
 
-    $s = 'removing old buildids for projectid: ' . $projectid;
+    $s = 'removing old buildids for projectid (with buildgroup): ' . $projectid;
     add_log($s, 'removeBuildsGroupwise');
-    echo '  -- ' . $s . "\n";
+    if ($echo) {
+        echo '  -- ' . $s . "\n"; // for command line feedback
+    }
     remove_build_chunked($buildids);
 }
 
@@ -94,7 +96,7 @@ function removeFirstBuilds($projectid, $days, $maxbuilds, $force = false, $echo 
         $buildids[] = $builds_array['id'];
     }
 
-    $s = 'removing old buildids for projectid: ' . $projectid;
+    $s = 'removing old buildids for projectid (without buildgroup) : ' . $projectid;
     add_log($s, 'removeFirstBuilds');
     if ($echo) {
         echo '  -- ' . $s . "\n"; // for "interactive" command line feedback
